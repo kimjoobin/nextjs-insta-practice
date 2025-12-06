@@ -14,11 +14,11 @@ class ApiClient {
 
   private getToken(): string | null {
     if (typeof window === 'undefined') return null;
-    
+
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.USER_INFO);
       if (!stored) return null;
-      
+
       const parsed = JSON.parse(stored);
       return parsed.state?.accessToken || null;
     } catch {
@@ -42,11 +42,16 @@ class ApiClient {
     // 헤더 설정
     const token = this.getToken();
 
-    console.log('🔑 localStorage에서 가져온 토큰:', token ? '있음' : '없음');
-    
-    const defaultHeaders: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    // 🔥 FormData 체크 - body는 restConfig에 포함됨
+    // FormData는 브라우저가 boundary와 함께 자동으로 설정함
+    const isFormData = restConfig.body instanceof FormData;
+
+    const defaultHeaders: HeadersInit = {};
+
+    // FormData가 아닐 때만 Content-Type 설정
+    if (!isFormData) {
+      defaultHeaders['Content-Type'] = 'application/json';
+    }
 
     if (token) {
       defaultHeaders.Authorization = `Bearer ${token}`;
@@ -96,9 +101,6 @@ class ApiClient {
       ...config,
       method: 'POST',
       body: data instanceof FormData ? data : JSON.stringify(data),
-      headers: data instanceof FormData 
-        ? config?.headers  // FormData는 Content-Type 자동 설정
-        : { 'Content-Type': 'application/json', ...config?.headers },
     });
   }
 

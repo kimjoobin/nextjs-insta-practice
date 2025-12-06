@@ -55,6 +55,8 @@ export function CreatePostForm({ onSuccess, onCancel }: CreatePostFormProps) {
       }
     }
 
+    console.log('files: ', selectedFiles)
+
     setFiles(selectedFiles);
 
     // 이미지 미리보기 생성

@@ -22,8 +22,6 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
 
       setAuth: (user, accessToken) => {
-        // 쿠키에 토큰 저장
-        console.log('💾 토큰 저장:', accessToken);
          // 🔥 수동으로 localStorage에 직접 저장(미들웨어에서 접근 가능)
         if (typeof window !== 'undefined') {
           document.cookie = `accessToken=${accessToken}; path=/; max-age=86400; SameSite=Lax`;

@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postApi } from '../api/postApi';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/shared/constants';
-import { CreatePostForm } from '../components/CreatePostForm';
 import { PageResponse, Post } from '../types';
 
 interface CreatePostData {
@@ -38,12 +37,17 @@ export function useCreatePost() {
         caption: data.caption || null,
         location: data.location || null,
       };
-      formData.append('request', new Blob([JSON.stringify(request)], {type: 'application/json'}));
+
+      // filename이 자동으로 붙음
+      //formData.append('request', new Blob([JSON.stringify(request)], {type: 'application/json'}));
+      formData.append('request', JSON.stringify(request));
 
       // 파일 추가
       files.forEach(file => {
         formData.append('files', file);
       });
+
+      console.log('formData:::: ', formData);
 
       return postApi.createPost(formData);
     },
@@ -51,7 +55,7 @@ export function useCreatePost() {
       // 피드 목록 다시 가져오기
       queryClient.invalidateQueries({ queryKey: ['posts'] });
       // 피드 페이지로 이동
-      router.push(ROUTES.FEED);
+      router.push(ROUTES.HOME);
     }
   });
 }

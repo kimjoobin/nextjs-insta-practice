@@ -32,11 +32,7 @@ export const postApi = {
 
   // 피드 등록
   createPost: async (formData: FormData) => {
-    const { data } = await apiClient.post('/posts', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const { data } = await apiClient.post(API_ENDPOINTS.POST_CREATE, formData);
     return data;
   },
 

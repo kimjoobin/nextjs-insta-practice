@@ -8,7 +8,7 @@ export const API_ENDPOINTS = {
   // Post
   POSTS: '/api/posts',
   POST_DETAIL: (postSeq: string) => `/api/posts/${postSeq}`,
-  POST_CREATE: '/api/posts',
+  POST_CREATE: '/api/posts/create',
   POST_UPDATE: (postSeq: string) => `/api/posts/${postSeq}`,
   
   // User
@@ -27,7 +27,6 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   SIGNUP: '/signup',
-  FEED: '/feed',
   CREATE_POST: '/create',
   POST_DETAIL: (postSeq: string) => `/post/${postSeq}`,
   PROFILE: (username: string) => `/profile/${username}`,
