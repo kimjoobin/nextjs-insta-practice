@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
-import { PostCard } from '@/features/post/components/PostCard';
+import PostCard from '@/features/post/components/PostCard';
 import { Button } from '@/components/common/Button';
 import { usePosts } from '@/features/post/hooks/usePost';
 import { useAuthStore } from '@/features/auth/stores/authStore';
@@ -12,7 +12,7 @@ import { ROUTES } from '@/shared/constants';
 export default function HomePage() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const { data: posts, isLoading, error } = usePosts();
+  const { data: postsData, isLoading, error } = usePosts();
 
   // 인증 체크
   useEffect(() => {
@@ -39,6 +39,9 @@ export default function HomePage() {
       </div>
     );
   }
+
+  // 🔥 content 배열 추출
+  const posts = postsData?.content || [];
 
   return (
     <div className="min-h-screen bg-instagram-background">
@@ -71,7 +74,8 @@ export default function HomePage() {
             </div>
           )}
 
-          {posts && posts.length === 0 ? (
+          {/*🔥 posts.length → posts.length */}
+          {posts.length === 0 ? (
             <div className="bg-white border border-instagram-border rounded-lg p-12 text-center">
               <p className="text-instagram-text-light mb-4">아직 게시물이 없습니다.</p>
               <Button
@@ -83,14 +87,14 @@ export default function HomePage() {
             </div>
           ) : (
             <div>
-              {posts?.map((post) => (
+              {posts.map((post) => (
                 <PostCard key={post.postSeq} post={post} />
               ))}
             </div>
           )}
 
           {/* 더 보기 */}
-          {posts && posts.length > 0 && (
+          {postsData && postsData.content.length > 0 && (
             <div className="text-center py-8">
               <p className="text-instagram-text-light text-sm">모든 게시물을 확인했습니다</p>
             </div>

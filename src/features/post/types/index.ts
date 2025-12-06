@@ -3,7 +3,7 @@ import { BaseEntity } from '@/types/common';
 export interface Post extends BaseEntity {
   postSeq: string;
   caption: string | null;
-  imageUrl: string;
+  images: string[];
   location: string | null;
   likeCount: number;
   commentCount: number;

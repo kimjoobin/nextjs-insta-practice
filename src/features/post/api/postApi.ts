@@ -1,15 +1,25 @@
 import { apiClient } from '@/shared/api/client';
 import { API_ENDPOINTS } from '@/shared/constants';
 import { ApiResponse } from '@/types/common';
-import type { Post, CreatePostRequest, UpdatePostRequest } from '../types';
+import type { Post, CreatePostRequest, UpdatePostRequest, PageResponse } from '../types';
 
 export const postApi = {
   // 피드 목록 조회
-  getPosts: async (): Promise<Post[]> => {
-    const response = await apiClient.get<ApiResponse<Post[]>>(
-      API_ENDPOINTS.POSTS
+  getPosts: async (page: number, size: number): Promise<PageResponse<Post>> => {
+    const response = await apiClient.get<ApiResponse<PageResponse<Post>>>(
+      `${API_ENDPOINTS.POSTS}?page=${page}&size=${size}`
     );
-    return response.data.content;
+
+    // 🔥 PageResponse 전체 반환
+    return response.data || {
+      content: [],
+      page: 0,
+      size: 0,
+      totalElements: 0,
+      totalPages: 0,
+      firstPage: true,
+      lastPage: true,
+    };
   },
 
   // 피드 상세 조회
@@ -21,25 +31,13 @@ export const postApi = {
   },
 
   // 피드 등록
-  createPost: async (data: CreatePostRequest, files: File[]): Promise<Post> => {
-    const formData = new FormData();
-    
-    // JSON 데이터를 Blob으로 변환
-    const requestBlob = new Blob([JSON.stringify(data)], {
-      type: 'application/json',
+  createPost: async (formData: FormData) => {
+    const { data } = await apiClient.post('/posts', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
-    formData.append('request', requestBlob);
-    
-    // 파일 추가
-    files.forEach((file) => {
-      formData.append('files', file);
-    });
-
-    const response = await apiClient.post<ApiResponse<Post>>(
-      API_ENDPOINTS.POSTS,
-      formData
-    );
-    return response.data;
+    return data;
   },
 
   // 피드 수정

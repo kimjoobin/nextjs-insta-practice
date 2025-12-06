@@ -90,3 +90,18 @@ export function throttle<T extends (...args: any[]) => any>(
     }
   };
 }
+
+export function getImageUrl(path: string | null | undefined): string {
+  if (!path) {
+    return '/images/default-profile.png'; // 기본 이미지
+  }
+
+  // 이미 전체 URL인 경우
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+
+  // 백엔드 API 경로로 변환
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8280';
+  return `${API_URL}${path}`;
+}

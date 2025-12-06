@@ -15,7 +15,7 @@ export const useLogin = () => {
     onSuccess: (response) => {
       // 임시로 user 데이터 설정 (실제로는 user 정보 API 호출 필요)
       const user = {
-        userSeq: response.userSeq,
+        userSeq: '',
         username: '',
         name: '',
         email: '',
