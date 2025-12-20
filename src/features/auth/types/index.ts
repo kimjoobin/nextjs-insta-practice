@@ -1,14 +1,5 @@
-export interface User {
-  userSeq: string;
-  username: string;
-  name: string;
-  email: string;
-  bio: string | null;
-  profileImageUrl: string | null;
-  followersCount: number;
-  followingCount: number;
-  postsCount: number;
-}
+// User 타입을 user feature에서 import
+export type { User, ProfileUser } from '@/features/user/types/user';
 
 export interface LoginRequest {
   username: string;

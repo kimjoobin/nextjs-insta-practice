@@ -10,10 +10,22 @@ export const API_ENDPOINTS = {
   POST_DETAIL: (postSeq: string) => `/api/posts/${postSeq}`,
   POST_CREATE: '/api/posts/create',
   POST_UPDATE: (postSeq: string) => `/api/posts/${postSeq}`,
+  USER_POSTS: (userSeq: string) => `/api/posts/user/${userSeq}`,
   
   // User
+  MY_PROFILE: '/api/users/me',
   USER_PROFILE: (userSeq: string) => `/api/users/${userSeq}`,
-  USER_POSTS: (userSeq: string) => `/api/users/${userSeq}/posts`,
+  MY_POSTS: '/api/posts/my/feed',
+  USER_UPDATE: '/api/users/me',
+  MY_FOLLOWER: '/api/users/followers',
+  MY_FOLLOWING: '/api/users/following',
+  USER_SEARCH: '/api/users/search',
+
+  // following
+  FOLLOW: (userSeq: string) => `/api/follow/${userSeq}`,
+  UNFOLLOW: (userSeq: string) => `/api/follow/${userSeq}/unfollow`,
+  USER_FOLLOWERS: (userSeq: string) => `/api/follow/${userSeq}/followers`,
+  USER_FOLLOWING: (userSeq: string) => `/api/follow/${userSeq}/following`,
 } as const;
 
 export const STORAGE_KEYS = {

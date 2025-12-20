@@ -1,7 +1,7 @@
-import { apiClient } from '@/shared/api/client';
-import { API_ENDPOINTS } from '@/shared/constants';
-import { ApiResponse } from '@/types/common';
-import type { Post, CreatePostRequest, UpdatePostRequest, PageResponse } from '../types';
+import {apiClient} from '@/shared/api/client';
+import {API_ENDPOINTS} from '@/shared/constants';
+import {ApiResponse} from '@/types/common';
+import type {PageResponse, Post, UpdatePostRequest} from '../types';
 
 export const postApi = {
   // 피드 목록 조회

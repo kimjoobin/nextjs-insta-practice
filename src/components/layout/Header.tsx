@@ -6,14 +6,25 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { useLogout } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/stores/authStore';
 import { ROUTES } from '@/shared/constants';
+import {useRouter} from "next/navigation";
 
 export const Header = () => {
   const user = useAuthStore((state) => state.user);
   const { mutate: logout } = useLogout();
+  const router = useRouter();
+
+  console.log('user: ', user);
 
   const handleLogout = () => {
     if (confirm('로그아웃 하시겠습니까?')) {
       logout();
+    }
+  };
+
+  const handleProfileClick = () => {
+    if (user?.userSeq) {
+      // 내 프로필 페이지로 이동
+      router.push(`/${user.userSeq}`);
     }
   };
 
@@ -52,7 +63,7 @@ export const Header = () => {
             <AiOutlineHeart className="text-2xl" />
           </button>
           <button
-            onClick={handleLogout}
+            onClick={handleProfileClick}
             className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition"
             title={user?.username || '프로필'}
           >

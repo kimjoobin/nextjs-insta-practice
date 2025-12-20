@@ -47,8 +47,6 @@ export function useCreatePost() {
         formData.append('files', file);
       });
 
-      console.log('formData:::: ', formData);
-
       return postApi.createPost(formData);
     },
     onSuccess: () => {
