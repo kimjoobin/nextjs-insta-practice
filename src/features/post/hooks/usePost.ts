@@ -2,7 +2,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postApi } from '../api/postApi';
 import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/shared/constants';
+import { QUERY_KEYS, ROUTES } from '@/shared/constants';
 import { PageResponse, Post } from '../types';
 
 interface CreatePostData {
@@ -73,3 +73,12 @@ export function useToggleLike() {
     },
   });
 }
+
+// 피드 상세조회
+export function usePostDetail(postSeq: string | null) {
+  return useQuery({
+    queryKey: [QUERY_KEYS.POST_DETAIL(postSeq!)],
+    queryFn: () => postApi.getPost(postSeq!),
+    enabled: !!postSeq,
+  });
+};

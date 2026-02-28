@@ -1,7 +1,7 @@
 import {FollowUser, ProfileUser, UpdateProfileRequest} from "@/features/user/types/user";
 import apiClient from "@/shared/api/client";
 import {ApiResponse} from "@/types/common";
-import {PageResponse, Post} from "@/features/post/types";
+import {PageResponse, Post, ProfilePost} from "@/features/post/types";
 import {API_ENDPOINTS} from "@/shared/constants";
 
 export const userApi = {
@@ -33,8 +33,8 @@ export const userApi = {
     },
 
     // 내 게시물 목록 (JWT 토큰 사용)
-    getMyPosts: async (page: number, size: number): Promise<PageResponse<Post>> => {
-        const response = await apiClient.get<ApiResponse<PageResponse<Post>>>(
+    getMyPosts: async (page: number, size: number): Promise<PageResponse<ProfilePost>> => {
+        const response = await apiClient.get<ApiResponse<PageResponse<ProfilePost>>>(
             `${API_ENDPOINTS.MY_POSTS}?page=${page}&size=${size}`
         );
 
@@ -50,8 +50,8 @@ export const userApi = {
     },
 
     // 사용자 게시글 목록
-    getUserPosts: async (userSeq: string, page: number, size: number): Promise<PageResponse<Post>> => {
-        const response = await apiClient.get<ApiResponse<PageResponse<Post>>>(
+    getUserPosts: async (userSeq: string, page: number, size: number): Promise<PageResponse<ProfilePost>> => {
+        const response = await apiClient.get<ApiResponse<PageResponse<ProfilePost>>>(
             `${API_ENDPOINTS.USER_POSTS(userSeq)}?page=${page}&size=${size}`
         );
 

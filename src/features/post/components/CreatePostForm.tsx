@@ -57,7 +57,7 @@ export function CreatePostForm({ onSuccess, onCancel }: CreatePostFormProps) {
 
     console.log('files: ', selectedFiles)
 
-    setFiles(selectedFiles);
+    setFiles(newFiles);
 
     // 이미지 미리보기 생성
     const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));

@@ -34,6 +34,14 @@ export interface PostListResponse {
   nextCursor?: string;
 }
 
+export interface ProfilePost {
+  postSeq: string;
+  likeCount: number;
+  commentCount: number;
+  thumbnail: string;
+
+}
+
 // 🔥 Spring Page 응답 타입 추가
 export interface PageResponse<T> {
   content: T[];

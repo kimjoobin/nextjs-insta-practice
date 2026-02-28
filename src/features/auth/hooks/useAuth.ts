@@ -2,7 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { authApi } from '../api/authApi';
 import { useAuthStore } from '../stores/authStore';
-import { ROUTES } from '@/shared/constants';
+import { ROUTES, STORAGE_KEYS } from '@/shared/constants';
 import type { LoginRequest, SignupRequest } from '../types';
 import {userApi} from "@/features/user/api/userApi";
 
@@ -19,10 +19,10 @@ export const useLogin = () => {
 
       // 토큰을 쿠키에 임시 저장(API 호출용)
       if (typeof window !== 'undefined') {
-        document.cookie = `accessToken=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
+        document.cookie = `${STORAGE_KEYS.ACCESS_TOKEN}=${accessToken}; ...`;
       }
 
-      // 사용자 정보 조회
+      // 2. 이제 쿠키가 확실히 세팅된 상태에서 user 정보 조회
       const user = await userApi.getMyProfile();
 
       return { accessToken, user };

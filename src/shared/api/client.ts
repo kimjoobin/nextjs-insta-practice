@@ -15,12 +15,24 @@ class ApiClient {
   private getToken(): string | null {
     if (typeof window === 'undefined') return null;
 
+    // 1순위: localStorage (Zustand persist - 일반적인 경우)
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.USER_INFO);
-      if (!stored) return null;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const token = parsed.state?.accessToken;
+        if (token) return token;
+      }
+    } catch {
+      // ignore
+    }
 
-      const parsed = JSON.parse(stored);
-      return parsed.state?.accessToken || null;
+    // 2순위: 쿠키 fallback (로그인 직후 localStorage 저장 전 타이밍)
+    try {
+      const match = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(`${STORAGE_KEYS.ACCESS_TOKEN}=`));
+      return match ? match.split('=')[1] : null;
     } catch {
       return null;
     }

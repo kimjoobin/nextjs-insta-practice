@@ -1,13 +1,14 @@
 'use client';
 
-import {Post} from "@/features/post/types";
+import {Post, ProfilePost} from "@/features/post/types";
 import {useState} from "react";
 import {AiFillHeart, AiOutlineComment} from "react-icons/ai";
 import Image from 'next/image';
 import {PostDetailModal} from "@/features/user/components/PostDetailModel";
+import { getImageUrl } from "@/shared/utils";
 
 interface PostGridProps {
-    posts: Post[];
+    posts: ProfilePost[];
     isLoading: boolean;
 }
 
@@ -16,7 +17,7 @@ export const PostGrid = ({
                              isLoading
                          }: PostGridProps) => {
 
-    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+    const [selectedPostSeq, setSelectedPostSeq] = useState<string | null>(null);
 
     if (isLoading) {
         return (
@@ -59,11 +60,11 @@ export const PostGrid = ({
                 {posts.map((post) => (
                     <button
                         key={post.postSeq}
-                        onClick={() => setSelectedPost(post)}
+                        onClick={() => setSelectedPostSeq(post.postSeq)}
                         className="relative aspect-square group overflow-hidden bg-gray-100"
                     >
                         <Image
-                            src={post.images[0] || '/placeholder.png'}
+                            src={getImageUrl(post.thumbnail)}
                             alt="게시물"
                             fill
                             className="object-cover"
@@ -88,10 +89,10 @@ export const PostGrid = ({
             </div>
 
             {/* 게시물 상세 모달 */}
-            {selectedPost && (
+            {selectedPostSeq && (
                 <PostDetailModal
-                    post={selectedPost}
-                    onClose={() => setSelectedPost(null)}
+                    postSeq={selectedPostSeq}
+                    onClose={() => setSelectedPostSeq(null)}
                 />
             )}
         </>
