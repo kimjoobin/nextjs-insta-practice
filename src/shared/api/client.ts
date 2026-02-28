@@ -13,9 +13,25 @@ class ApiClient {
   }
 
   private getToken(): string | null {
+    // SSR 환경(Next.js 서버)에서는 브라우저 API 접근 불가
     if (typeof window === 'undefined') return null;
 
-    // 1순위: localStorage (Zustand persist - 일반적인 경우)
+    // 1순위: 브라우저 쿠키에서 먼저 찾기 (Zustand 하이드레이션 지연과 무관하게 즉시 접근 가능)
+    try {
+      // 참고: useAuthStore에서 'accessToken='으로 굽고 있으므로 해당 키값 매칭
+      // 만약 STORAGE_KEYS.ACCESS_TOKEN의 값이 'accessToken'과 다르다면 수정이 필요합니다.
+      const match = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(`accessToken=`)); 
+        
+      if (match) {
+        return match.split('=')[1];
+      }
+    } catch (error) {
+      console.warn('쿠키에서 토큰을 읽는 중 에러 발생:', error);
+    }
+
+    // 2순위: localStorage (Zustand persist - 쿠키가 날아갔거나 만료된 경우 대비)
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.USER_INFO);
       if (stored) {
@@ -23,19 +39,11 @@ class ApiClient {
         const token = parsed.state?.accessToken;
         if (token) return token;
       }
-    } catch {
-      // ignore
+    } catch (error) {
+      console.warn('localStorage에서 토큰을 읽는 중 에러 발생:', error);
     }
 
-    // 2순위: 쿠키 fallback (로그인 직후 localStorage 저장 전 타이밍)
-    try {
-      const match = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`${STORAGE_KEYS.ACCESS_TOKEN}=`));
-      return match ? match.split('=')[1] : null;
-    } catch {
-      return null;
-    }
+    return null; // 둘 다 없으면 null
   }
 
   private async request<T>(
